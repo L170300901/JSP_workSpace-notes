@@ -1,0 +1,362 @@
+# jsp를 분석하는 순서(톰캣과 웹브라우져)
+
+[ex] abc가 화면에 출력되려면?
+t3.jsp
+====
+<%  String s="abc"; %>
+<script>
+document.write(s);
+</script>
+[an]
+<%  String s="abc"; %>
+<script>
+document.write("<%=s%>");
+</script>
+
+
+[ex]
+<%  int a=100; %>
+<script>
+document.write(<%=a%>);
+</script>
+
+
+# 화면이동하기
+1  <script>
+ location.href="url";
+ </script>
+
+2 <%
+ response.sendRedirect("url");
+  %>
+
+3
+<jsp:forward page="url" />
+
+
+[ex]  아래와 같이 요청하고 화면에 어떤결과값이 나오는지 확인하세요.
+http://localhost:8282/64-2/t1.jsp?abc=100
+t1.jsp
+====
+<script>
+location.href="t2.jsp";
+</script>
+
+t2.jsp
+====
+<%=request.getParameter("abc")%>
+
+
+[ex] 위 소스코드에서 "t1.jsp"를 요청할때 입력한 
+파라메터값을 다음페이지인 "t2.jsp"파일에서 출력해보려면?
+http://localhost:8282/64-2/t1.jsp?abc=100
+
+[an]
+t1.jsp
+====
+<%  String s=request.getParameter("abc"); %>
+<script>
+location.href="t2.jsp?abc=<%=s%>";
+</script>
+
+t2.jsp
+====
+<%=request.getParameter("abc")%>
+
+
+[ex] "t4.jsp"를 요청할때 입력한 
+파라메터값을 다음페이지인 "t2.jsp"파일에서 출력해보려면?
+http://localhost:8282/64-2/t4.jsp?abc=100
+
+t4.jsp
+====
+<% response.sendRedirect("t2.jsp"); %>
+
+t2.jsp
+====
+<%=request.getParameter("abc")%>
+
+[an]
+t4.jsp
+====
+<% 
+String s=request.getParameter("abc");
+response.sendRedirect("t2.jsp?abc="+s); 
+%>
+
+
+[ex] "t5.jsp"를 요청할때 입력한 
+파라메터값이 다음페이지에 "t2.jsp" 출력됩니다.
+http://localhost:8282/64-2/t5.jsp?abc=100
+
+t5.jsp
+====
+<jsp:forward page="t2.jsp" />
+
+결국 forward로 화면이동하면 현재페이지와 
+다음페이지의 request주소값은 동일하다
+
+
+[ex] 아래와 같이 url정보를 입력할때
+"/"를 붙이면 톰캣의 webapps의 경로와 매칭된다고
+생각하면 됩니다.
+따라서 아래와 같이 입력하면 404페이지가 출력됩니다.
+올바르게 동작할 수 있게 변경하세요~
+t6.jsp
+====
+<%  response.sendRedirect("/t2.jsp");  %>
+[an]
+t6.jsp
+====
+<%  
+String cPath=request.getContextPath();
+response.sendRedirect(cPath+"/t2.jsp");  
+%>
+
+[ex]
+t7.jsp
+====
+<form action="t8.jsp">
+<input type="text" name="ab">
+<input type="submit">
+</form>
+
+t8.jsp
+====
+<% request.setCharacterEncoding("utf-8"); %>
+<%=request.getParameter("ab") %>
+
+[ex] 한글인코딩하기 95p
+
+한글은 java.net.URLEncoder를 이용해서 
+인코딩처리해서 url에 전달  
+아래소스코드를 IE에서 실행하면 "연결"을 눌렀을때 오류납니다.
+해결해보세요~
+t9.jsp
+====
+<a href="t10.jsp?abc=가나다">연결</a>
+
+t10.jsp
+====
+<%=request.getParameter("abc") %>
+
+[an]
+t9.jsp
+====
+<%@page import="java.net.URLEncoder"%>
+<% 
+String s1="가나다"; 
+String s2=URLEncoder.encode(s1,"utf-8");
+%>
+<a href="t10.jsp?abc=<%=s2%>">연결</a>
+
+t10.jsp
+====
+<% request.setCharacterEncoding("utf-8"); %>
+<%=request.getParameter("abc") %>
+
+# 주석문
+
+html주석문 <!--   -->
+js주석문  /*   */ , //
+css주석문 /*   */
+jsp주석문 <%--  --%>
+
+# 웹어플리케이션 폴더와 URL의 관계 107p
+
+[ex] 아래와 같이 "list.jsp"파일이 저장되어 있습니다.
+프로젝트명/board/list.jsp
+프로젝트명/member/list.jsp
+"프로젝트명/t11.jsp"에서 해당글자를 누르면 
+각각의 페이지로 연결되게 해주세요~
+
+t11.jsp
+=====
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+게시글목록<br/>
+회원목록<br/>
+</body>
+</html>
+[an1] 상대경로
+t11.jsp
+=====
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<a href="board/list.jsp">게시글목록</a><br/>
+<a href="member/list.jsp">회원목록</a><br/>
+</body>
+</html>
+
+[an2] 절대경로
+t12.jsp
+=====
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<% String cPath=request.getContextPath(); %>
+<a href="<%=cPath%>/board/list.jsp">게시글목록</a><br/>
+<a href="<%=cPath%>/member/list.jsp">회원목록</a><br/>
+</body>
+</html>
+
+[ex]  t13.jsp를 아래와 같이 저장하고 상대경로로 경로를 설정해주세요~
+
+프로젝트명/common/t13.jsp
+
+t13.jsp(절대경로)
+=====
+<% String cPath=request.getContextPath(); %>
+<a href="<%=cPath%>/board/list.jsp">게시글목록</a><br/>
+<a href="<%=cPath%>/member/list.jsp">회원목록</a><br/>
+
+t14.jsp(상대경로)
+=====
+<a href="../board/list.jsp">게시글목록</a><br/>
+<a href="../member/list.jsp">회원목록</a><br/>
+
+# 웹어플리케이션배포 110p
+
+# 6장에러처리 140p
+
+[ex] 
+http://localhost:8282/64-2/t15.jsp?abc=100
+100
+
+http://localhost:8282/64-2/t15.jsp
+파라메터값을 입력해주세요~
+
+[an]
+<%
+String s=request.getParameter("abc");
+if(s==null) s="파라메터값을 입력하세요~";
+%>
+<%=s%>
+
+
+[ex]
+t15.jsp
+=====
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" errorPage="t16.jsp" %>
+<% Integer.parseInt("백"); %>
+
+
+t16.jsp
+=====
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" isErrorPage="true"%>
+<%=exception.getMessage() %>
+
+
+# application객체
+
+[ex]
+web.xml
+======
+  <context-param>
+  <param-name>aa</param-name>
+  <param-value>bb</param-value>
+  </context-param>
+
+index.jsp
+====== 
+<%=application.getInitParameter("aa") %><br/>
+
+# 영역 132p
+
+[ex]
+t18.jsp
+====
+<%
+pageContext.setAttribute("a","aa");
+request.setAttribute("b","bb");
+session.setAttribute("c","cc");
+application.setAttribute("d","dd");
+%>
+<%=pageContext.getAttribute("a")%><br/>
+<%=request.getAttribute("b")%><br/>
+<%=session.getAttribute("c")%><br/>
+<%=application.getAttribute("d")%><br/>
+<a href="t19.jsp">연결</a>
+
+t19.jsp
+=====
+<%=pageContext.getAttribute("a")%><br/>
+<%=request.getAttribute("b")%><br/>
+<%=session.getAttribute("c")%><br/>
+<%=application.getAttribute("d")%><br/>
+
+[ex]
+t20.jsp
+=====
+<%
+pageContext.setAttribute("a","aa");
+request.setAttribute("b","bb");
+session.setAttribute("c","cc");
+application.setAttribute("d","dd");
+%>
+<jsp:forward page="t19.jsp" />
+
+[ex] "t21.jsp"를 실행하면 "t22.jsp"로 화면이동합니다.
+결과화면에 aaa   bbb가 출력되게 하려면?
+단, t21.jsp를 수정하세요~
+
+t21.jsp
+====
+<jsp:forward page="t22.jsp" />
+
+t22.jsp
+====
+<%=request.getParameter("abc")%><br/> 
+<%=request.getAttribute("ghi")%>
+
+[an1]  아래와 같이 실행하세요~
+"http://localhost:8282/64-2/t21.jsp?abc=aaa"
+
+t21.jsp
+=====
+<% request.setAttribute("ghi","bbb"); %>
+<jsp:forward page="t22.jsp" />
+
+[an2] 185p
+t21.jsp
+=====
+<% request.setAttribute("ghi","bbb"); %>
+<jsp:forward page="t22.jsp">
+ <jsp:param name="abc" value="aaa" />
+</jsp:forward>
+
+
+[ex] 컴파일에러를 해결하세요~
+t22.jsp
+=====
+<%=request.getParameter("abc")%><br/> 
+<%  String s=request.getAttribute("ghi");  %>
+<%=s%>
+[an]
+t22.jsp
+=====
+<%=request.getParameter("abc")%><br/> 
+<%  String s=(String)request.getAttribute("ghi");  %>
+<%=s%>

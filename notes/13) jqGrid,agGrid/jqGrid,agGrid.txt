@@ -1,0 +1,530 @@
+# ag-Grid 사이트
+https://www.ag-grid.com/javascript-getting-started/
+
+
+# 그리드화면에 뿌리기
+[ex1]
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
+</head>
+<body>
+  <h1>Hello from ag-grid!</h1> 
+  <div id="myGrid" style="height: 600px;width:450px" class="ag-theme-balham"></div>
+  <script type="text/javascript" charset="utf-8">
+    var columnDefs = [
+      {headerName: "Make", field: "make", width:150 },
+      {headerName: "Model", field: "model", width:150},
+      {headerName: "Price", field: "price", width:150}
+    ];
+    var rowData = [
+      {make: "Toyota", model: "Celica", price: 35000},
+      {make: "Ford", model: "Mondeo", price: 32000},
+      {make: "Porsche", model: "Boxter", price: 72000}
+    ];
+   var gridOptions = {
+      columnDefs: columnDefs,
+      rowData: rowData
+    };
+  var eGridDiv = document.querySelector('#myGrid');
+  new agGrid.Grid(eGridDiv, gridOptions);
+  </script>
+</body>
+</html>
+
+# Grid Properties
+https://www.ag-grid.com/javascript-grid-properties/
+
+--> defaultColDef
+[ex2] 
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
+</head>
+<body>
+  <h1>Hello from ag-grid!</h1> 
+  <div id="myGrid" style="height:200px;width:300px" class="ag-theme-balham"></div>
+  <script type="text/javascript" charset="utf-8">
+    var columnDefs = [
+      {headerName: "Make", field: "make"},
+      {headerName: "Model", field: "model"},
+      {headerName: "Price", field: "price"}
+    ];
+    var rowData = [
+      {make: "Toyota", model: "Celica", price: 35000},
+      {make: "Ford", model: "Mondeo", price: 32000},
+      {make: "Porsche", model: "Boxter", price: 72000}
+    ];
+   var gridOptions = {
+      columnDefs: columnDefs,
+      rowData: rowData,
+      defaultColDef: { width: 100 ,editable: true },
+    };
+  var eGridDiv = document.querySelector('#myGrid');
+  new agGrid.Grid(eGridDiv, gridOptions);
+  </script>
+</body>
+</html>
+
+--> editType
+[ex3] 
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
+</head>
+<body>
+  <h1>Hello from ag-grid!</h1> 
+  <div id="myGrid" style="height:200px;width:300px" class="ag-theme-balham"></div>
+  <script type="text/javascript" charset="utf-8">
+    var columnDefs = [
+      {headerName: "Make", field: "make"},
+      {headerName: "Model", field: "model"},
+      {headerName: "Price", field: "price"}
+    ];
+    var rowData = [
+      {make: "Toyota", model: "Celica", price: 35000},
+      {make: "Ford", model: "Mondeo", price: 32000},
+      {make: "Porsche", model: "Boxter", price: 72000}
+    ];
+   var gridOptions = {
+      columnDefs: columnDefs,
+      rowData: rowData,editType:'fullRow',
+      defaultColDef: { width: 100 ,editable: true },
+    };
+  var eGridDiv = document.querySelector('#myGrid');
+  new agGrid.Grid(eGridDiv, gridOptions);
+  </script>
+</body>
+</html>
+
+
+# Column Properties
+https://www.ag-grid.com/javascript-grid-column-properties/
+
+--> checkboxSelection
+[ex4] 
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
+</head>
+<body>
+  <h1>Hello from ag-grid!</h1> 
+  <div id="myGrid" style="height:200px;width:300px" class="ag-theme-balham"></div>
+  <script type="text/javascript" charset="utf-8">
+    var columnDefs = [
+      {headerName: "Make", field: "make", checkboxSelection:true},
+      {headerName: "Model", field: "model"},
+      {headerName: "Price", field: "price"}
+    ];
+    var rowData = [
+      {make: "Toyota", model: "Celica", price: 35000},
+      {make: "Ford", model: "Mondeo", price: 32000},
+      {make: "Porsche", model: "Boxter", price: 72000}
+    ];
+   var gridOptions = {
+      columnDefs: columnDefs,
+      rowData: rowData,
+      defaultColDef: { width: 100 ,editable: true },
+    };
+  var eGridDiv = document.querySelector('#myGrid');
+  new agGrid.Grid(eGridDiv, gridOptions);
+  </script>
+</body>
+</html>
+
+
+-->  rowSelection
+[ex5]
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
+</head>
+<body>
+  <h1>Hello from ag-grid!</h1> 
+  <div id="myGrid" style="height:200px;width:300px" class="ag-theme-balham"></div>
+  <script type="text/javascript" charset="utf-8">
+    var columnDefs = [
+      {headerName: "Make", field: "make", checkboxSelection:true},
+      {headerName: "Model", field: "model"},
+      {headerName: "Price", field: "price"}
+    ];
+    var rowData = [
+      {make: "Toyota", model: "Celica", price: 35000},
+      {make: "Ford", model: "Mondeo", price: 32000},
+      {make: "Porsche", model: "Boxter", price: 72000}
+    ];
+   var gridOptions = {
+      columnDefs: columnDefs,
+      rowData: rowData, rowSelection:'multiple',
+      defaultColDef: { width: 100 ,editable: true },
+    };
+  var eGridDiv = document.querySelector('#myGrid');
+  new agGrid.Grid(eGridDiv, gridOptions);
+  </script>
+</body>
+</html>
+
+
+# Event
+https://www.ag-grid.com/javascript-grid-events/
+
+--> rowDoubleClicked , rowEditingStopped
+[ex6]
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.js">
+  </script>
+</head>
+<body>
+  <h1>Hello from ag-grid!</h1> 
+  <div id="myGrid" style="height:200px;width:300px" class="ag-theme-balham"></div>
+  <script type="text/javascript" charset="utf-8">
+    var columnDefs = [
+      {headerName: "Make", field: "make", checkboxSelection:true},
+      {headerName: "Model", field: "model"},
+      {headerName: "Price", field: "price"}
+    ];
+    var rowData = [
+      {make: "Toyota", model: "Celica", price: 35000},
+      {make: "Ford", model: "Mondeo", price: 32000},
+      {make: "Porsche", model: "Boxter", price: 72000}
+    ];
+   var gridOptions = {
+      columnDefs: columnDefs,
+      rowData: rowData,editType:'fullRow',
+      defaultColDef: { width: 100 ,editable: true },
+      onRowDoubleClicked:rowDoubleClickedFunc,
+      onRowEditingStopped:rowEditingStoppedFunc
+    };
+  var eGridDiv = document.querySelector('#myGrid');
+  new agGrid.Grid(eGridDiv, gridOptions);
+  
+  function rowDoubleClickedFunc(e){
+   console.log("줄더블클릭");
+  }
+  function rowEditingStoppedFunc(e){
+   console.log("줄편집멈춤");
+  }
+  </script>
+</body>
+</html>
+
+
+# Grid API
+https://www.ag-grid.com/javascript-grid-api/
+
+--> setFocusedCell(rowIndex, colKey, floating)
+[ex7]
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.js">
+  </script>
+</head>
+<body>
+  <h1>Hello from ag-grid!</h1> 
+  <div id="myGrid" style="height:200px;width:300px" class="ag-theme-balham"></div>
+  <script type="text/javascript" charset="utf-8">
+    var columnDefs = [
+      {headerName: "Make", field: "make", checkboxSelection:true},
+      {headerName: "Model", field: "model"},
+      {headerName: "Price", field: "price"}
+    ];
+    var rowData = [
+      {make: "Toyota", model: "Celica", price: 35000},
+      {make: "Ford", model: "Mondeo", price: 32000},
+      {make: "Porsche", model: "Boxter", price: 72000}
+    ];
+   var gridOptions = {
+      columnDefs: columnDefs,
+      rowData: rowData,editType:'fullRow',
+      defaultColDef: { width: 100 ,editable: true },
+      onRowDoubleClicked:rowDoubleClickedFunc,
+      onRowEditingStopped:rowEditingStoppedFunc
+    };
+  var eGridDiv = document.querySelector('#myGrid');
+  new agGrid.Grid(eGridDiv, gridOptions);
+  
+  function rowDoubleClickedFunc(e){
+   gridOptions.api.setFocusedCell(e.rowIndex,'make');
+  }
+  function rowEditingStoppedFunc(e){
+   console.log(e);
+  }
+  </script>
+</body>
+</html>
+
+
+[ex8] 수정처리
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.js">
+  </script>
+</head>
+<body>
+  <h1>Hello from ag-grid!</h1> 
+  <div id="myGrid" style="height:200px;width:300px" class="ag-theme-balham"></div>
+  <script type="text/javascript" charset="utf-8">
+   var result=[];
+    var columnDefs = [
+      {headerName: "Make", field: "make", checkboxSelection:true},
+      {headerName: "Model", field: "model"},
+      {headerName: "Price", field: "price"}
+    ];
+    var rowData = [
+      {make: "Toyota", model: "Celica", price: 35000},
+      {make: "Ford", model: "Mondeo", price: 32000},
+      {make: "Porsche", model: "Boxter", price: 72000}
+    ];
+   var gridOptions = {
+      columnDefs: columnDefs,
+      rowData: rowData,editType:'fullRow',
+      defaultColDef: { width: 100 ,editable: true },
+      onRowDoubleClicked:rowDoubleClickedFunc,
+      onRowEditingStopped:rowEditingStoppedFunc
+    };
+  var eGridDiv = document.querySelector('#myGrid');
+  new agGrid.Grid(eGridDiv, gridOptions);
+  
+  function rowDoubleClickedFunc(e){
+   console.log("줄더블클릭");
+  }
+  function rowEditingStoppedFunc(e){
+   console.log("줄편집멈춤");
+   result[e.rowIndex]=e.data;
+  process();
+  }
+  function process(){
+  result.forEach(function(element) {
+    console.log(element);
+  });
+  }
+  </script>
+</body>
+</html>
+
+--> setRowData
+[ex9] 
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.js">
+  </script>
+</head>
+<body>
+  <button type="button" onclick="addFunc()">추가</button> 
+  <div id="myGrid" style="height:200px;width:300px" class="ag-theme-balham"></div>
+  <script type="text/javascript" charset="utf-8">
+   var result=[];
+    var columnDefs = [
+      {headerName: "Make", field: "make", checkboxSelection:true},
+      {headerName: "Model", field: "model"},
+      {headerName: "Price", field: "price"}
+    ];
+    var rowData = [
+      {make: "Toyota", model: "Celica", price: 35000},
+      {make: "Ford", model: "Mondeo", price: 32000},
+      {make: "Porsche", model: "Boxter", price: 72000}
+    ];
+   var gridOptions = {
+      columnDefs: columnDefs,
+      rowSelection:'multiple',
+      rowData: rowData,editType:'fullRow',
+      defaultColDef: { width: 100 ,editable: true },
+      onRowDoubleClicked:rowDoubleClickedFunc,
+      onRowEditingStopped:rowEditingStoppedFunc
+    };
+     
+  var eGridDiv = document.querySelector('#myGrid');
+  new agGrid.Grid(eGridDiv, gridOptions);
+  
+  function rowDoubleClickedFunc(e){
+   console.log("줄더블클릭");
+  }
+  function rowEditingStoppedFunc(e){
+   console.log("줄편집멈춤");
+   result[e.rowIndex]=e.data;
+  process();
+  }
+  function process(){
+  result.forEach(function(element) {
+    console.log(element);
+  });
+  }
+  function addFunc(){
+   rowData.push({make: "aaa", model: "bbb", price: 1000});
+    gridOptions.api.setRowData(rowData); 
+  }
+  </script>
+</body>
+</html>
+
+# 원격데이터가져오기
+
+https://www.ag-grid.com/javascript-grid/
+
+[ex10]
+list.jsp
+=====
+<%@page import="java.util.Map"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.List"%>
+<%@page import="kr.co.seoulit.member.dao.MemberDAO"%>
+<%@page import="kr.co.seoulit.member.dao.MemberDAOImpl"%>
+<%@page import="kr.co.seoulit.member.to.MemberBean"%>
+<%@page import="net.sf.json.JSONObject"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+ MemberDAO dao=MemberDAOImpl.getInstance();
+ List<MemberBean> list=dao.selectMemberList();
+ Map<String,Object> map=new HashMap<String,Object>();
+ map.put("list",list);
+ JSONObject json=JSONObject.fromObject(map);
+ out.println(json);
+%>
+
+t10.jsp
+======
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
+</head>
+<body>
+  <h1>Hello from ag-grid!</h1>
+  <div id="myGrid" style="height: 600px;width:500px;" class="ag-theme-balham"></div>
+  <script type="text/javascript" charset="utf-8">
+    var columnDefs = [
+      {headerName: "ID", field: "id",checkboxSelection: true },
+      {headerName: "PW", field: "pw"},
+      {headerName: "ADDR", field: "addr"},
+      {headerName: "TEL", field: "tel"}
+    ];
+    var gridOptions = {columnDefs: columnDefs};
+  var eGridDiv = document.querySelector('#myGrid');
+  new agGrid.Grid(eGridDiv, gridOptions);
+  agGrid.simpleHttpRequest({url: 'list.jsp'}).then(function(data) {
+      gridOptions.api.setRowData(data.list);
+  });
+  </script>
+</body>
+</html>
+
+# 일괄처리
+
+[ex11]
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+  <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+  <script>
+  var rowData=null; 
+  var memberObj=null;
+  var columnDefs = [
+      {headerName: "ID", field: "id",checkboxSelection: true },
+      {headerName: "PW", field: "pw"},
+      {headerName: "ADDR", field: "addr"},
+      {headerName: "TEL", field: "tel"}
+    ];
+  var gridOptions = {
+       columnDefs: columnDefs,
+       rowSelection:'multiple',
+       editType:'fullRow',
+       defaultColDef: { width: 100 ,editable: true },
+       onRowDoubleClicked:rowDoubleClickedFunc,
+       onRowEditingStopped:rowEditingStoppedFunc
+     };
+document.addEventListener('DOMContentLoaded', function() {
+    var gridDiv = document.querySelector('#myGrid');
+    new agGrid.Grid(gridDiv, gridOptions);
+    agGrid.simpleHttpRequest({url: 'list.jsp'}).then(function(data) {
+     memberObj=data.member;
+     rowData=data.list;
+        gridOptions.api.setRowData(data.list);
+    });
+});
+ function rowDoubleClickedFunc(e){
+    gridOptions.api.setFocusedCell(e.rowIndex,'id');
+   }
+   function rowEditingStoppedFunc(e){
+    if(rowData[e.rowIndex]["status"]!="insert")
+    rowData[e.rowIndex]["status"]="update";
+    rowData[e.rowIndex]=e.data;
+   }
+   function addFunc(){
+  memberObj["status"]="insert";
+  var newObject=$.extend(true, {}, memberObj);
+     rowData.push(newObject);
+     gridOptions.api.setRowData(rowData); 
+   }
+   function processFunc(){
+    var list=gridOptions.api.getSelectedRows();
+    list.forEach(function(obj){ obj["status"]="delete"; });
+   console.log(rowData);   
+   }
+</script>
+</head>
+<body>
+  <button type="button" onclick="addFunc()">추가</button>
+  <button type="button" onclick="processFunc()">일괄처리</button>  
+  <div id="myGrid" style="height:500px;width:500px;" class="ag-theme-balham"></div>
+</body>
+</html>

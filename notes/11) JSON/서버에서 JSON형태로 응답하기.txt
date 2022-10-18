@@ -1,0 +1,548 @@
+# JSON : JavaScriptObjectNotation
+데이터통신을 할때 데이터를 전송하는 여러가지 방식중의 하나
+
+
+# AJAX(Asynchronous Javascript And XML) : 비동기방식의 연동방법론
+[ex] 화면을 이동하지 않고 데이터를 서버에서 받아오는 방법
+t1.jsp
+====
+{"member":{"id":"aa","pw":"bb","addr":"cc","tel":"dd"}}
+
+t2.jsp
+====
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.Map"%>
+<%@page import="net.sf.json.JSONObject"%>
+<%@page import="kr.co.seoulit.member.to.MemberBean"%>
+<%@page import="java.util.List"%>
+<%@page import="kr.co.seoulit.member.dao.MemberDAOImpl"%>
+<%@page import="kr.co.seoulit.member.dao.MemberDAO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+String id=request.getParameter("id");
+MemberDAO dao=MemberDAOImpl.getInstance();
+MemberBean member=dao.selectMember(id);
+Map<String,Object> map=new HashMap<>();
+map.put("bean",member);
+JSONObject json=JSONObject.fromObject(map);
+out.println(json);
+%>
+
+아래 "ID"를 클릭하면 화면이동하지 않고 해당"ID"의 
+회원정보를 경고대화상자에 띄우세요~
+
+t5.jsp
+====
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.5.0.js">
+</script>
+<script>
+function f1(){
+ $.ajax({
+  url:"t1.jsp",
+  success:function(data){
+   alert(data);
+  }
+ });
+}
+function f2(){
+ //here
+}
+</script>
+</head>
+<body>
+<input type="button" onclick="f1()">
+<a href="#" onclick="f2('aa')">aa</a><br/>
+<a href="#" onclick="f2('bb')">bb</a><br/>
+<a href="#" onclick="f2('cc')">cc</a><br/>
+</body>
+</html>
+[an]
+t5.jsp
+====
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.5.0.js">
+</script>
+<script>
+function f1(){
+ $.ajax({
+  url:"t1.jsp",
+  success:function(data){
+   alert(data);
+  }
+ });
+}
+function f2(str){
+ $.ajax({
+  url:"t2.jsp",
+  data:{"id":str},
+  success:function(rData){
+   alert(rData);
+  }
+ });
+}
+</script>
+</head>
+<body>
+<input type="button" onclick="f1()"><br/>
+<a href="#" onclick="f2('aa')">aa</a><br/>
+<a href="#" onclick="f2('bb')">bb</a><br/>
+<a href="#" onclick="f2('cc')">cc</a><br/>
+</body>
+</html>
+
+[ex]
+<script>
+
+</script>
+
+
+[ex] ID가 숫자인것은 회원정보를 가지고 오지만
+ID가 문자열인것은 회원정보를 가져오지못합니다.
+해결해주세요~
+t4.jsp
+====
+<%@page import="kr.co.seoulit.member.to.MemberBean"%>
+<%@page import="java.util.List"%>
+<%@page import="kr.co.seoulit.member.dao.MemberDAOImpl"%>
+<%@page import="kr.co.seoulit.member.dao.MemberDAO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+MemberDAO dao=MemberDAOImpl.getInstance();
+List<MemberBean> list=dao.selectMemberList();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.5.0.js">
+</script>
+<script>
+function f(str){
+ $.ajax({
+  url:"t2.jsp",
+  data:{"id":str},
+  success:function(rData){
+   alert(rData);
+  }
+ });
+}
+</script>
+</head>
+<body>
+<%
+for(MemberBean bean: list){
+ String id=bean.getId();
+out.write("<a href=# onclick=f("+id+")>");
+out.write(id+"</a><br/>");
+}
+%>
+</body>
+</html>
+[an]
+<%
+for(MemberBean bean: list){
+ String id=bean.getId();
+out.write("<a href=# onclick=f('"+id+"')>");
+out.write(id+"</a><br/>");
+}
+%>
+
+
+# 자바스크립트의 내장객체 JSON객체의 parse메서드 사용하기
+
+[ex]
+<script>
+var a1={"b":"c"};
+document.write(a1.b);
+var a2='{"b":"c"}';
+document.write(JSON.parse(a2).b);
+</script>
+
+
+[ex] 아래 "ID"를 클릭하면 화면이동하지 않고 해당"ID"의 
+회원"PW"를 경고대화상자에 띄우세요~
+t4.jsp
+====
+<%@page import="kr.co.seoulit.member.to.MemberBean"%>
+<%@page import="java.util.List"%>
+<%@page import="kr.co.seoulit.member.dao.MemberDAOImpl"%>
+<%@page import="kr.co.seoulit.member.dao.MemberDAO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+MemberDAO dao=MemberDAOImpl.getInstance();
+List<MemberBean> list=dao.selectMemberList();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+for(MemberBean bean: list)
+out.write(bean.getId()+"<br/>");
+%>
+</body>
+</html>
+[an]
+<%@page import="kr.co.seoulit.member.to.MemberBean"%>
+<%@page import="java.util.List"%>
+<%@page import="kr.co.seoulit.member.dao.MemberDAOImpl"%>
+<%@page import="kr.co.seoulit.member.dao.MemberDAO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+MemberDAO dao=MemberDAOImpl.getInstance();
+List<MemberBean> list=dao.selectMemberList();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.5.0.js">
+</script>
+<script>
+function f(str){
+ $.ajax({
+  url:"t2.jsp",
+  data:{"id":str},
+  success:function(rData){
+   alert(JSON.parse(rData).bean.pw);
+  }
+ });
+}
+</script>
+</head>
+<body>
+<%
+for(MemberBean bean: list){
+ String id=bean.getId();
+out.write("<a href=# onclick=f('"+id+"')>");
+out.write(id+"</a><br/>");
+}
+%>
+</body>
+</html>
+
+
+[ex]
+t6.jsp
+====
+<%@page import="kr.co.seoulit.member.to.MemberBean"%>
+<%@page import="java.util.List"%>
+<%@page import="kr.co.seoulit.member.dao.MemberDAOImpl"%>
+<%@page import="kr.co.seoulit.member.dao.MemberDAO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+MemberDAO dao=MemberDAOImpl.getInstance();
+List<MemberBean> list=dao.selectMemberList();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.5.0.js">
+</script>
+<script>
+function f(str){
+ $.ajax({
+  url:"t2.jsp",
+  data:{"id":str},
+  dataType:"json",
+  success:function(rData){
+   alert(rData.bean.pw);
+  }
+ });
+}
+</script>
+</head>
+<body>
+<%
+for(MemberBean bean: list){
+ String id=bean.getId();
+out.write("<a href=# onclick=f('"+id+"')>");
+out.write(id+"</a><br/>");
+}
+%>
+</body>
+</html>
+
+
+[ex] 버튼을 누르면 화면이동하지 않고 "t3.jsp"의 
+회원리스트 결과를 경고대화상자에 띄우세요~
+t3.jsp
+====
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.Map"%>
+<%@page import="net.sf.json.JSONObject"%>
+<%@page import="kr.co.seoulit.member.to.MemberBean"%>
+<%@page import="java.util.List"%>
+<%@page import="kr.co.seoulit.member.dao.MemberDAOImpl"%>
+<%@page import="kr.co.seoulit.member.dao.MemberDAO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+MemberDAO dao=MemberDAOImpl.getInstance();
+List<MemberBean> list=dao.selectMemberList();
+Map<String,Object> map=new HashMap<>();
+map.put("memberlist",list);
+JSONObject json=JSONObject.fromObject(map);
+out.println(json);
+%>
+
+t7.jsp
+====
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<input type="button" value="회원리스트">
+</body>
+</html>
+[an]
+t7.jsp
+====
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.5.0.js">
+</script>
+<script>
+function f(){
+ $.ajax({
+  url:"t3.jsp",
+  success:function(data){
+   alert(data);
+  }
+ });
+}
+</script>
+</head>
+<body>
+<input type="button" value="회원리스트" onclick="f()">
+</body>
+</html>
+
+
+# JQuery객체의 after메서드 216p
+
+
+
+[ex] ID를 클릭하면 바로옆에 비번을 출력해주세요~
+t4.jsp
+====
+<%@page import="kr.co.seoulit.member.to.MemberBean"%>
+<%@page import="java.util.List"%>
+<%@page import="kr.co.seoulit.member.dao.MemberDAOImpl"%>
+<%@page import="kr.co.seoulit.member.dao.MemberDAO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+MemberDAO dao=MemberDAOImpl.getInstance();
+List<MemberBean> list=dao.selectMemberList();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.5.0.js">
+</script>
+<script>
+function f(str){
+ $.ajax({
+  url:"t2.jsp",
+  data:{"id":str},
+  success:function(rData){
+   alert(JSON.parse(rData).bean.pw);
+  }
+ });
+}
+</script>
+</head>
+<body>
+<%
+for(MemberBean bean: list){
+ String id=bean.getId();
+out.write("<a href=# onclick=f('"+id+"')>");
+out.write(id+"</a><br/>");
+}
+%>
+</body>
+</html>
+[an]
+<%@page import="kr.co.seoulit.member.to.MemberBean"%>
+<%@page import="java.util.List"%>
+<%@page import="kr.co.seoulit.member.dao.MemberDAOImpl"%>
+<%@page import="kr.co.seoulit.member.dao.MemberDAO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+MemberDAO dao=MemberDAOImpl.getInstance();
+List<MemberBean> list=dao.selectMemberList();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.5.0.js">
+</script>
+<script>
+function f(aTag){
+ $.ajax({
+  url:"t2.jsp",
+  data:{"id":$(aTag).text()},
+  success:function(rData){
+   var pw=JSON.parse(rData).bean.pw;
+   $(aTag).after("<span>"+pw+"</span>");
+  }
+ });
+}
+</script>
+</head>
+<body>
+<%
+for(MemberBean bean: list){
+ String id=bean.getId();
+out.write("<a href=# onclick=f(this)>");
+out.write(id+"</a><br/>");
+}
+%>
+</body>
+</html>
+
+
+[ex] div태그에 id를 출력되게 해주세요~
+t8.jsp 
+====
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.5.0.js">
+</script>
+<script>
+function f(){
+ $.ajax({
+  url:"t3.jsp",
+  success:function(data){
+   alert(data);
+  }
+ });
+}
+</script>
+</head>
+<body>
+<input type="button" value="회원리스트" onclick="f()">
+<div id="divTag">
+</div>
+</body>
+</html>
+[an]
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.5.0.js">
+</script>
+<script>
+function f(){
+ $.ajax({
+  url:"t3.jsp",
+  dataType:"json",
+  success:function(data){
+   var buffer=[];
+   $(data.memberlist).each(function(index,member){
+    buffer.push(member.id+"<br/>");
+   });
+   $("#divTag").html(buffer.join(""));
+  }
+ });
+}
+</script>
+</head>
+<body>
+<input type="button" value="회원리스트" onclick="f()">
+<div id="divTag">
+</div>
+</body>
+</html>
+
+
+[ex]
+t9.jsp
+====
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.5.0.js">
+</script>
+<script>
+function f(){
+ $.ajax({
+  url:"t3.jsp",
+  dataType:"json",
+  success:function(data){
+   $(data.memberlist).each(function(index,member){
+    $("<input />",{
+     type:"radio",
+     value:member.id,
+     name:"box"
+    }).appendTo("#divTag").after(member.id);
+    $("<br />").appendTo("#divTag");
+   });
+   $("input:radio").click(
+     function(){ alert(this.value); }
+   );
+  }
+ });
+}
+</script>
+</head>
+<body>
+<input type="button" value="회원리스트" onclick="f()">
+<div id="divTag">
+</div>
+</body>
+</html>

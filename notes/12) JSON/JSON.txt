@@ -1,0 +1,166 @@
+# XMLHttpRequest
+
+[ex] ajax1.jsp
+[ex] xhr.jsp
+
+# 클라이언트에서 웹서버에 JSON형태로 데이터보내기
+http://json-lib.sourceforge.net/apidocs/jdk15/index.html
+
+[ex]
+t1.jsp
+====
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.5.0.js">
+</script>
+<script>
+function f1(){
+ var data={ "member":{"id":"a","pw":"b","addr":"c","tel":"d"} };
+ $.ajax({
+  url:"t2.jsp",
+  data:{"senddata":JSON.stringify(data)},
+  success:function(rData){
+   
+  }
+ });
+}
+function f2(){
+ var data={
+  "list":[
+  {"id":"a1","pw":"b1","addr":"c1","tel":"d1"},
+  {"id":"a2","pw":"b2","addr":"c2","tel":"d2"},
+  {"id":"a3","pw":"b3","addr":"c3","tel":"d3"}
+  ]
+ };
+ $.ajax({
+  url:"t3.jsp",
+  data:{"senddata":JSON.stringify(data)},
+  success:function(rData){}
+ });
+}
+</script>
+</head>
+<body>
+<input type="button" value="회원한명데이터보내기" onclick="f1()">
+<input type="button" value="회원여러명데이터보내기" onclick="f2()">
+</body>
+</html>
+
+t2.jsp
+====
+<%@page import="net.sf.json.JSONObject"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+String data=request.getParameter("senddata");
+JSONObject json1=JSONObject.fromObject(data);
+JSONObject json2=json1.getJSONObject("member");
+System.out.println(json2.get("id"));
+%>
+
+t3.jsp
+====
+<%@page import="net.sf.json.JSONArray"%>
+<%@page import="net.sf.json.JSONObject"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+String data=request.getParameter("senddata");
+JSONObject json1=JSONObject.fromObject(data);
+JSONArray array=json1.getJSONArray("list");
+for(Object obj: array){
+ JSONObject json2=(JSONObject)obj;
+ System.out.println(json2.get("id"));
+}
+%>
+
+
+[ex]
+t4.jsp
+====
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.5.0.js">
+</script>
+<script>
+function f1(){
+ var data={"member":{"id":"a","pw":"b","addr":"c","tel":"d"}};
+ $.ajax({
+  url:"t5.jsp",
+  data:{"senddata":JSON.stringify(data)},
+  success:function(rData){}
+ });
+}
+function f2(){
+ var data={
+  "list":[
+  {"id":"a1","pw":"b1","addr":"c1","tel":"d1"},
+  {"id":"a2","pw":"b2","addr":"c2","tel":"d2"},
+  {"id":"a3","pw":"b3","addr":"c3","tel":"d3"}
+  ]
+ };
+ $.ajax({
+  url:"t6.jsp",
+  data:{"senddata":JSON.stringify(data)},
+  success:function(rData){}
+ });
+}
+</script>
+</head>
+<body>
+<input type="button" value="회원한명데이터보내기" onclick="f1()">
+<input type="button" value="회원여러명데이터보내기" onclick="f2()">
+</body>
+</html>
+
+t5.jsp
+====
+<%@page import="kr.co.seoulit.member.to.MemberBean"%>
+<%@page import="net.sf.json.JSONObject"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+String data=request.getParameter("senddata");
+JSONObject json1=JSONObject.fromObject(data);
+JSONObject json2=json1.getJSONObject("member");
+MemberBean bean=(MemberBean)JSONObject.toBean(json2,MemberBean.class);
+System.out.println(bean.getId());
+System.out.println(bean.getPw());
+%>
+
+t6.jsp
+====
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="kr.co.seoulit.member.to.MemberBean"%>
+<%@page import="net.sf.json.JSONArray"%>
+<%@page import="net.sf.json.JSONObject"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+String data=request.getParameter("senddata");
+JSONObject json1=JSONObject.fromObject(data);
+JSONArray array=json1.getJSONArray("list");
+List<MemberBean> list=new ArrayList<>();
+for(Object obj: array){
+ JSONObject json2=(JSONObject)obj;
+ MemberBean bean=(MemberBean)JSONObject.toBean(json2,MemberBean.class);
+ list.add(bean);
+}
+System.out.println(list.get(0).getId());
+System.out.println(list.get(0).getPw());
+System.out.println(list.get(1).getId());
+System.out.println(list.get(1).getPw());
+%>
+
+[hw] "t7.jsp"를 완성해주세요~

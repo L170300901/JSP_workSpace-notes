@@ -1,0 +1,597 @@
+[ex] 아래와 같이 요청하면 "empno"파라메터를 입력한뒤
+직원이름이 출력되게 하려면?
+
+http://localhost:8282/64-4/t1.jsp?empno=7369
+SMITH
+
+[an]
+t1.jsp
+====
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="kr.co.seoulit.common.util.DBUtil2"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+String id=request.getParameter("empno");
+String sql="select ename from emp where empno="+id;
+try(
+Connection conn=DBUtil2.getConnection();
+PreparedStatement pstmt=conn.prepareStatement(sql);
+ResultSet rs=pstmt.executeQuery();
+){
+while(rs.next())
+out.write(rs.getString("ename")+"<br/>");
+}catch(Exception e){
+out.write(e.toString());
+}
+%>
+</body>
+</html>
+
+
+
+[ex] "직원이름보기"를 누르면 다음페이지(t3.jsp)에
+직원번호에 맞는 직원이름이 출력되게 하세요~
+t2.jsp와 t3.jsp를 생성합니다
+
+t2.jsp
+====
+<h1>직원번호입력해주세요</h1>
+번호 : <input type="text">
+<input type="button" value="직원이름보기">
+[an]
+t2.jsp
+====
+<h1>직원번호입력해주세요</h1>
+<form action="t3.jsp">
+번호 : <input type="text" name="empno">
+<input type="submit" value="직원이름보기">
+</form>
+t3.jsp
+====
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="kr.co.seoulit.common.util.DBUtil2"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+String id=request.getParameter("empno");
+String sql="select ename from emp where empno="+id;
+try(
+Connection conn=DBUtil2.getConnection();
+PreparedStatement pstmt=conn.prepareStatement(sql);
+ResultSet rs=pstmt.executeQuery();
+){
+while(rs.next())
+out.write(rs.getString("ename")+"<br/>");
+}catch(Exception e){
+out.write(e.toString());
+}
+%>
+</body>
+</html>
+
+
+[ex] "t4.jsp"의 실행결과 화면에서 
+각각의 직원번호를 누르면 "t5.jsp"로 화면이동되고
+해당직원의 이름을 출력하세요~
+
+t4.jsp
+====
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="kr.co.seoulit.common.util.DBUtil2"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+String sql="select empno from emp";
+try(
+Connection conn=DBUtil2.getConnection();
+PreparedStatement pstmt=conn.prepareStatement(sql);
+ResultSet rs=pstmt.executeQuery();
+){
+while(rs.next()){
+out.write("<a href=#>");
+out.write(rs.getString("empno")+"</a><br/>");
+}
+}catch(Exception e){
+out.write(e.toString());
+}
+%>
+</body>
+</html>
+[an]
+t4.jsp
+====
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="kr.co.seoulit.common.util.DBUtil2"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+String sql="select empno from emp";
+try(
+Connection conn=DBUtil2.getConnection();
+PreparedStatement pstmt=conn.prepareStatement(sql);
+ResultSet rs=pstmt.executeQuery();
+){
+while(rs.next()){
+String no=rs.getString("empno");
+out.write("<a href=t5.jsp?empno="+no+">");
+out.write(no+"</a><br/>");
+}
+}catch(Exception e){
+out.write(e.toString());
+}
+%>
+</body>
+</html>
+
+t5.jsp
+====
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="kr.co.seoulit.common.util.DBUtil2"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+String id=request.getParameter("empno");
+String sql="select ename from emp where empno="+id;
+try(
+Connection conn=DBUtil2.getConnection();
+PreparedStatement pstmt=conn.prepareStatement(sql);
+ResultSet rs=pstmt.executeQuery();
+){
+while(rs.next())
+out.write(rs.getString("ename")+"<br/>");
+}catch(Exception e){
+out.write(e.toString());
+}
+%>
+</body>
+</html>
+
+[ex] "t6.jsp"의 실행결과 화면에서 
+직원번호 하나를 선택하고 "직원이름보기"버튼을 누르면
+"t7.jsp"로 화면이동되고 해당직원의 이름을 출력하세요~
+
+t6.jsp
+====
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="kr.co.seoulit.common.util.DBUtil2"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+String sql="select empno from emp";
+try(
+Connection conn=DBUtil2.getConnection();
+PreparedStatement pstmt=conn.prepareStatement(sql);
+ResultSet rs=pstmt.executeQuery();
+){
+while(rs.next()){
+out.write("<input type=radio name=empno>");
+out.write(rs.getString("empno")+"<br/>");
+}
+}catch(Exception e){
+out.write(e.toString());
+}
+%>
+<input type="button" value="직원이름보기">
+</body>
+</html>
+[an]
+t6.jsp
+====
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="kr.co.seoulit.common.util.DBUtil2"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<form action="t7.jsp">
+<%
+String sql="select empno from emp";
+try(
+Connection conn=DBUtil2.getConnection();
+PreparedStatement pstmt=conn.prepareStatement(sql);
+ResultSet rs=pstmt.executeQuery();
+){
+while(rs.next()){
+String no=rs.getString("empno");
+out.write("<input type=radio name=empno value="+no+">");
+out.write(no+"<br/>");
+}
+}catch(Exception e){
+out.write(e.toString());
+}
+%>
+<input type="submit" value="직원이름보기">
+</form>
+</body>
+</html>
+
+t7.jsp
+====
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="kr.co.seoulit.common.util.DBUtil2"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+String id=request.getParameter("empno");
+String sql="select ename from emp where empno="+id;
+try(
+Connection conn=DBUtil2.getConnection();
+PreparedStatement pstmt=conn.prepareStatement(sql);
+ResultSet rs=pstmt.executeQuery();
+){
+while(rs.next())
+out.write(rs.getString("ename")+"<br/>");
+}catch(Exception e){
+out.write(e.toString());
+}
+%>
+</body>
+</html>
+
+[ex]  "t8.jsp"페이지의 직원번호를 DB연동해서 화면에 출력해주세요~
+해당직원번호를 선택한뒤 "직원이름보기"를 누르면 
+"t9.jsp"로 화면이동되고 직원이름이 출력될 수 있도록 
+소스코드를 작성해주세요~
+
+t8.jsp
+====
+<h1>::: 직원번호 :::</h1>
+<select>
+<option>7369</option>
+<option>7370</option>
+<option>7371</option>
+<option>7377</option>
+</select>
+<input type="button" value="직원이름보기">
+[an]
+t8.jsp
+====
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="kr.co.seoulit.common.util.DBUtil2"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>::: 직원번호 :::</h1>
+<form action="t9.jsp">
+<%
+String sql="select empno from emp";
+try(
+Connection conn=DBUtil2.getConnection();
+PreparedStatement pstmt=conn.prepareStatement(sql);
+ResultSet rs=pstmt.executeQuery();
+){
+out.write("<select name=empno>");
+while(rs.next()){
+out.write("<option>"); 
+out.write(rs.getString("empno"));
+out.write("</option>");
+}
+out.write("</select>");
+}catch(Exception e){
+out.write(e.toString());
+}
+%>
+<input type="submit" value="직원이름보기">
+</form>
+</body>
+</html>
+
+t9.jsp
+====
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="kr.co.seoulit.common.util.DBUtil2"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+String id=request.getParameter("empno");
+String sql="select ename from emp where empno="+id;
+try(
+Connection conn=DBUtil2.getConnection();
+PreparedStatement pstmt=conn.prepareStatement(sql);
+ResultSet rs=pstmt.executeQuery();
+){
+while(rs.next())
+out.write(rs.getString("ename")+"<br/>");
+}catch(Exception e){
+out.write(e.toString());
+}
+%>
+</body>
+</html>
+
+[ex] 아래와 같이 회원의 ID를 파라메터값으로 전달하면
+회원의 정보를 출력하는 소스코드를 작성하세요~
+http://localhost:8282/64-4/t10.jsp?id=aa
+
+::: 회원정보 :::
+ID : aa
+PW : 11
+ADDR : bb
+TEL : cc
+
+[an]
+t10.jsp
+=====
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="kr.co.seoulit.common.util.DBUtil2"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>::: 회원정보 :::</h1>
+<%
+String id=request.getParameter("id");
+String sql="select * from member where id=?";
+Connection conn=null;
+PreparedStatement pstmt=null;
+ResultSet rs=null;
+try{
+ conn=DBUtil2.getConnection();
+ pstmt=conn.prepareStatement(sql);
+ pstmt.setString(1,id);
+ rs=pstmt.executeQuery(); 
+
+ if(rs.next()){
+  out.write("ID :"+rs.getString("id")+"<br/>");
+  out.write("PW :"+rs.getString("pw")+"<br/>");
+  out.write("ADDR :"+rs.getString("addr")+"<br/>");
+  out.write("TEL :"+rs.getString("tel")+"<br/>");
+ }else{
+  out.write("해당ID는 존재하지 않습니다.");
+ }
+}catch(Exception e){
+ out.write(e.toString());
+}finally{
+ try{
+ if(rs!=null){ rs.close(); rs=null; }
+ if(pstmt!=null){ pstmt.close(); pstmt=null; }
+ if(conn!=null){ conn.close(); conn=null; }
+ }catch(Exception e2){ out.write("자원정리중오류발생~"); }
+}
+%>
+</body>
+</html>
+
+
+[ex]  아래와 같이 회원의 ID를 파라메터값으로 전달하면
+회원의 정보를 텍스트박스에 출력하는 소스코드를 작성하세요~
+http://localhost:8282/64-4/t11.jsp?id=aa
+
+t11.jsp
+=====
+ID <input type="text"><br/>
+PW <input type="text"><br/>
+ADDR <input type="text"><br/>
+TEL <input type="text"><br/>
+[an]
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="kr.co.seoulit.common.util.DBUtil2"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>::: 회원정보 :::</h1>
+<%
+String p_id=request.getParameter("id");
+String sql="select * from member where id=?";
+Connection conn=null;
+PreparedStatement pstmt=null;
+ResultSet rs=null;
+String id="",pw="",addr="",tel="";
+try{
+ conn=DBUtil2.getConnection();
+ pstmt=conn.prepareStatement(sql);
+ pstmt.setString(1,p_id);
+ rs=pstmt.executeQuery(); 
+
+ if(rs.next()){
+  id=rs.getString("id");
+  pw=rs.getString("pw");
+  addr=rs.getString("addr");
+  tel=rs.getString("tel");
+ }else{
+  out.write("해당ID는 존재하지 않습니다.");
+ }
+}catch(Exception e){
+ out.write(e.toString());
+}finally{
+ try{
+ if(rs!=null){ rs.close(); rs=null; }
+ if(pstmt!=null){ pstmt.close(); pstmt=null; }
+ if(conn!=null){ conn.close(); conn=null; }
+ }catch(Exception e2){ out.write("자원정리중오류발생~"); }
+}
+%>
+ID <input type="text" value="<%=id%>"><br/>
+PW <input type="text" value="<%=pw%>"><br/>
+ADDR <input type="text" value="<%=addr%>"><br/>
+TEL <input type="text" value="<%=tel%>"><br/>
+</body>
+</html>
+
+[ex] 회원ID목록을 출력하는 "t12.jsp"를 생성해주세요~
+각각의 회원ID를 클릭하면 "t11.jsp"로 화면이동 되고
+회원의 정보가 출력됩니다.
+
+t12.jsp
+====
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="kr.co.seoulit.common.util.DBUtil2"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+String sql="select * from member";
+try(
+Connection conn=DBUtil2.getConnection();
+PreparedStatement pstmt=conn.prepareStatement(sql);
+ResultSet rs=pstmt.executeQuery();
+){
+while(rs.next()){
+String id=rs.getString("id");
+out.write("<a href=t11.jsp?id="+id+">");
+out.write(id+"</a><br/>");
+}
+}catch(Exception e){
+out.write(e.toString());
+}
+%>
+</body>
+</html>
+
+[ex] 회원여러명의 정보를 테이블에 출력해주세요~
+t13.jsp
+=====
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="kr.co.seoulit.common.util.DBUtil2"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+td { border:1px solid navy; }
+</style>
+</head>
+<body>
+<%
+String sql="select * from member";
+try(
+Connection conn=DBUtil2.getConnection();
+PreparedStatement pstmt=conn.prepareStatement(sql);
+ResultSet rs=pstmt.executeQuery();
+){
+String[] array={"id","pw","addr","tel"};
+out.write("<table>");
+out.write("<tr>");
+for(String str:array)
+out.write("<td>"+str.toUpperCase()+"</td>");
+out.write("</tr>");
+while(rs.next()){
+ out.write("<tr>");
+ for(String str:array)
+ out.write("<td>"+rs.getString(str)+"</td>");
+ out.write("</tr>");
+}
+out.write("</table>");
+}catch(Exception e){
+out.write(e.toString());
+}
+%>
+</body>
+</html>

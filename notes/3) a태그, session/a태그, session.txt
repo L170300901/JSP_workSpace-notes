@@ -1,0 +1,446 @@
+[ex] 아래와 같이 요청했을때 
+"http://localhost:8282/64-1/t1.jsp"
+다음과 같은 결과가 출력되려면?
+/64-1
+/64-1/t1.jsp
+
+[ex] 아래와 같이 요청하고 "제출"버튼을 누르면
+"http://localhost:8282/64-1/t2.jsp"
+url이 다음과 같이 변경될 수 있도록 하세요~
+"http://localhost:8282/64-1/t3.jsp?a=100&b=200&c=300"
+t2.jsp
+====
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<input type="submit">
+</body>
+</html>
+[an]
+t2.jsp
+====
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<form action="t3.jsp">
+<input type="text" name="a" value="100">
+<input type="hidden" name="b" value="200">
+<input type="hidden" name="c" value="300">
+<input type="submit">
+</form>
+</body>
+</html>
+
+t3.jsp
+====
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%=request.getParameter("a") %><br/>
+<%=request.getParameter("b") %><br/>
+<%=request.getParameter("c") %><br/>
+</body>
+</html>
+
+
+[ex] 한글전송하기 84p
+위소스코드에서 t2.jsp파일의 텍스트에 한글을 입력해서 전송하세요~
+한글이 깨진다면 아래와 같이 처리해주셔야합니다
+t3.jsp
+====
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<% request.setCharacterEncoding("utf-8"); %>
+<%=request.getParameter("a") %><br/>
+<%=request.getParameter("b") %><br/>
+<%=request.getParameter("c") %><br/>
+</body>
+</html>
+
+# a태그이용해서 페이지 이동하기 85p
+[ex] "연결" 글자를 누르면 t3.jsp페이지로 이동합니다.
+화면에 100 200 300 출력되게 해주세요~
+
+t4.jsp
+====
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<a href="t3.jsp">연결</a><br/>
+</body>
+</html>
+[an]
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<a href="t3.jsp?a=100&b=200&c=300">연결</a><br/>
+</body>
+</html>
+
+[ex] 
+t5.jsp
+====
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<% String str="abc"; %>
+<input type="text" value="<%=str%>">
+</body>
+</html>
+
+
+[ex] 아래와 같이 요청했을때
+"http://localhost:8282/64-1/t6.jsp?id=aa&pw=bb"
+각각의 텍스트에 파라메터의 값이 출력되게 하려면?
+
+t6.jsp
+====
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+ID : <input type="text"><br/>
+PW : <input type="text"><br/>
+</body>
+</html>
+[an]
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<% String pw=request.getParameter("pw"); %>    
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+ID : <input type="text" value="<%=request.getParameter("id")%>"><br/>
+PW : <input type="text" value="<%=pw%>"><br/>
+</body>
+</html>
+
+
+[ex] 위 소스코드에서 요청한 url에 파라메터가 없으면
+텍스트박스에 null이 출력됩니다.
+null이 출력되지않게 하려면?
+
+[an]
+t7.jsp
+====
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<% 
+String id=request.getParameter("id"); 
+String pw=request.getParameter("pw");
+if(id==null) id="";
+if(pw==null) pw="";
+%>    
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+ID : <input type="text" value="<%=id%>"><br/>
+PW : <input type="text" value="<%=pw%>"><br/>
+</body>
+</html>
+
+
+# java.io.File
+[ex]
+import java.io.*;
+class A{
+ public static void main(String args[]){
+ File f1=new File("C:/dev/tomcat 9/webapps/64-1");
+ for( File f2 : f1.listFiles() ) 
+ System.out.println(f2.getName());
+ }
+}
+
+[ex] 아래와 같이 요청하면 64-1폴더에 있는 
+모든 디렉토리와 파일명이 화면에 출력되려면?
+"http://localhost:8282/64-1/t8.jsp"
+ 
+t8.jsp
+====
+<%@page import="java.io.File"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+File f1=new File("C:/dev/tomcat 9/webapps/64-1");
+for( File f2 : f1.listFiles() ){
+ if( f2.isFile())
+ out.write(f2.getName()+"<br/>");
+}
+%>
+</body>
+</html>
+
+[ex] 위 소스코드에서 해당파일을 클릭하면 
+그파일로 연결되게 하려면?
+t9.jsp
+====
+<%@page import="java.io.File"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+File f1=new File("C:/dev/tomcat 9/webapps/64-1");
+for( File f2 : f1.listFiles() ){
+ if( f2.isFile()){
+  String fn=f2.getName();
+  out.write("<a href="+fn+">");
+  out.write(fn);
+  out.write("</a><br/>");
+ }
+}
+%>
+</body>
+</html>
+
+[ex] application객체의 getRealPath메서드 129p
+t10.jsp
+====
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%=application.getRealPath("/")%><br/>
+<%=application.getRealPath("/WEB-INF")%><br/>
+</body>
+</html>
+
+[ex] 아래소스코드가 유지보수상 좋은 소스코드가 되려면
+경로부분을 고쳐야합니다. 경로부분을 고쳐주세요~
+[an]
+t11.jsp
+=====
+<%@page import="java.io.File"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+String path=application.getRealPath("/");
+File f1=new File(path);
+for( File f2 : f1.listFiles() ){
+ if( f2.isFile()){
+  String fn=f2.getName();
+  out.write("<a href="+fn+">");
+  out.write(fn);
+  out.write("</a><br/>");
+ }
+}
+%>
+</body>
+</html>
+
+[ex]  회원의 id가 "abc"가 출력되게 하려면?
+MemberBean.java
+============
+package a.b;
+
+public class MemberBean {
+ String id,pw,addr,tel;
+
+ public String getId() {
+  return id;
+ }
+
+ public void setId(String id) {
+  this.id = id;
+ }
+
+ public String getPw() {
+  return pw;
+ }
+
+ public void setPw(String pw) {
+  this.pw = pw;
+ }
+
+ public String getAddr() {
+  return addr;
+ }
+
+ public void setAddr(String addr) {
+  this.addr = addr;
+ }
+
+ public String getTel() {
+  return tel;
+ }
+
+ public void setTel(String tel) {
+  this.tel = tel;
+ }
+}
+
+t12.jsp
+=====
+<%@page import="a.b.MemberBean"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+String id=request.getParameter("id");
+String pw=request.getParameter("pw");
+String addr=request.getParameter("addr");
+String tel=request.getParameter("tel");
+MemberBean bean=new MemberBean();
+bean.setId(id);
+bean.setPw(pw);
+bean.setAddr(addr);
+bean.setTel(tel);
+%>    
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%=bean.getId() %>
+<a href="t13.jsp">회원정보보기</a>
+</body>
+</html>
+[an] http://localhost:8282/64-1/t12.jsp?id=abc&pw=11&addr=22&tel=33
+
+[ex] 다음페이지에 객체를 전달하려면 아래 메서드를 이용해서
+저장하고 얻어오세요~
+session.setAttribute("이름",값)
+Object obj=session.getAttribute("이름");
+
+t13.jsp
+====
+<%@page import="a.b.MemberBean"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+MemberBean bean=(MemberBean)session.getAttribute("member"); 
+%>
+<%=bean.getId() %><br/>
+<%=bean.getPw() %><br/>
+<%=bean.getAddr() %><br/>
+<%=bean.getTel() %><br/>
+<a href="t14.jsp">회원정보보기</a>
+</body>
+</html>
+
+t14.jsp
+====
+<%@page import="a.b.MemberBean"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+MemberBean bean=(MemberBean)session.getAttribute("member"); 
+%>
+<%=bean.getId() %><br/>
+<%=bean.getPw() %><br/>
+<%=bean.getAddr() %><br/>
+<%=bean.getTel() %><br/>
+</body>
+</html>
+
+[ex] 웹상의 경로 즉 URL
+t15.jsp
+====
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<a href="/t16.jsp">연결1</a><br/>
+<a href="<%=request.getContextPath()%>/t16.jsp">연결1</a><br/>
+</body>
+</html>
